@@ -4,11 +4,12 @@ import { BezierCurve, ViewRange } from './types';
 import { mapPairs, toDrawPoints } from './utils';
 import { Point } from './components/Point';
 import { Handle } from './components/Handle';
+import { Grid } from './components/Grid';
 
 // 線の見た目
 export interface LineStyle {
   color?: string;
-  width?: number;
+  weight?: number;
 }
 
 // 点の見た目
@@ -16,7 +17,7 @@ export interface PointStyle {
   size?: number;
   color?: string;
   borderColor?: string;
-  borderWidth?: number;
+  borderWeight?: number;
 }
 
 // ハンドルの見た目
@@ -26,7 +27,17 @@ export interface HandleStyle {
   borderColor?: string;
   borderWidth?: number;
   lineColor?: string;
-  lineWidth?: number;
+  lineWeight?: number;
+}
+
+// グリッドの見た目
+export interface GridStyle {
+  hidden?: boolean;
+  color?: string;
+  weight?: number;
+  opacity?: number;
+  xStep?: number;
+  yStep?: number;
 }
 
 type Props = SVGProps<SVGSVGElement> & {
@@ -42,6 +53,7 @@ type Props = SVGProps<SVGSVGElement> & {
   lineStyle?: LineStyle;
   pointStyle?: PointStyle;
   handleStyle?: HandleStyle;
+  gridStyle?: GridStyle;
 };
 
 export default function BezierTimeline({
@@ -53,13 +65,13 @@ export default function BezierTimeline({
 
   lineStyle = {
     color: '#343A40',
-    width: 3,
+    weight: 3,
   },
   pointStyle = {
     size: 4,
     color: '#ffffff',
     borderColor: '#007BFF',
-    borderWidth: 2,
+    borderWeight: 2,
   },
   handleStyle = {
     size: 5,
@@ -67,7 +79,15 @@ export default function BezierTimeline({
     borderColor: '#007BFF',
     borderWidth: 1,
     lineColor: '#000000',
-    lineWidth: 1,
+    lineWeight: 1,
+  },
+  gridStyle = {
+    hidden: false,
+    xStep: 50,
+    yStep: 50,
+    color: '#000000',
+    weight: 1,
+    opacity: 0.2,
   },
 
   ...props
@@ -76,6 +96,8 @@ export default function BezierTimeline({
 
   return (
     <svg width={width} height={height} {...props}>
+      <Grid width={width} height={height} xRange={xRange} yRange={yRange} {...gridStyle} />
+
       {convertedBezierCurve.map((point, i) => (
         <g key={i}>
           {point.handleL != undefined && <Handle position={point.handleL} origin={point.position} {...handleStyle} />}

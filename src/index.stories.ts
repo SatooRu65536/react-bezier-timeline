@@ -22,7 +22,7 @@ const tmpBezierCurve: BezierCurve = [
     position: { x: 100, y: 100 },
   },
   {
-    position: { x: 200, y: 100 },
+    position: { x: 400, y: 200 },
   },
 ];
 
