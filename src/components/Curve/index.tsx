@@ -1,14 +1,16 @@
-import { Point } from "@/types";
-import { memo } from "react";
+import styles from './index.module.css';
+import { Point } from '@/types';
+import { memo } from 'react';
 
 interface Props {
   left: Point;
   right: Point;
-  lineColor: string;
-  lineWidth: number;
+
+  color?: string;
+  width?: number;
 }
 
-export const Curve = memo(function ({ left, right, lineColor, lineWidth }: Props) {
+export const Curve = memo(function ({ left, right, color, width }: Props) {
   // 開始
   const sx = left.position.x;
   const sy = left.position.y;
@@ -28,5 +30,5 @@ export const Curve = memo(function ({ left, right, lineColor, lineWidth }: Props
   // ベジェ曲線のパス
   const d = `M${sx},${sy} C${cx1},${cy1} ${cx2},${cy2} ${ex},${ey}`;
 
-  return <path d={d} fill="none" stroke={lineColor} strokeWidth={lineWidth} />;
+  return <path className={styles.path} d={d} stroke={color} strokeWidth={width} />;
 });
