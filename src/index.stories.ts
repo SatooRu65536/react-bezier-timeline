@@ -18,8 +18,8 @@ const tmpBezierCurve: BezierCurve = [
     handleR: { x: 100, y: 0 },
   },
   {
+    handleL: { x: 0, y: 0 },
     position: { x: 100, y: 100 },
-    // handleL: { x: 0, y: 0 },
   },
   {
     position: { x: 200, y: 100 },
@@ -34,7 +34,7 @@ export const Primary: Story = {
     bezierCurve: tmpBezierCurve,
     width,
     height,
-    xRange: [0, width],
-    yRange: [0, height],
+    // xRange: [0, width],
+    // yRange: [0, height],
   },
 };
