@@ -56,24 +56,23 @@ export default function BezierTimeline({
     width: 3,
   },
   pointStyle = {
-    size: 5,
+    size: 4,
     color: '#ffffff',
     borderColor: '#007BFF',
-    borderWidth: 3,
+    borderWidth: 2,
   },
   handleStyle = {
     size: 5,
-    color: '#007BFF',
-    borderColor: '#ffffff',
-    borderWidth: 3,
-    lineColor: '#ff0000',
-    lineWidth: 2,
+    color: '#ffffff',
+    borderColor: '#007BFF',
+    borderWidth: 1,
+    lineColor: '#000000',
+    lineWidth: 1,
   },
 
   ...props
 }: Props) {
   const convertedBezierCurve = toDrawPoints(bezierCurve, width, height, xRange, yRange);
-  console.log(convertedBezierCurve);
 
   return (
     <svg width={width} height={height} {...props}>
