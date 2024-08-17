@@ -4,9 +4,11 @@ import { memo } from "react";
 interface Props {
   left: Point;
   right: Point;
+  lineColor: string;
+  lineWidth: number;
 }
 
-const Curve = memo(function ({ left, right }: Props) {
+export const Curve = memo(function ({ left, right, lineColor, lineWidth }: Props) {
   // 開始
   const sx = left.position.x;
   const sy = left.position.y;
@@ -26,7 +28,5 @@ const Curve = memo(function ({ left, right }: Props) {
   // ベジェ曲線のパス
   const d = `M${sx},${sy} C${cx1},${cy1} ${cx2},${cy2} ${ex},${ey}`;
 
-  return <path d={d} stroke="red" fill="none" strokeWidth={2} />;
+  return <path d={d} fill="none" stroke={lineColor} strokeWidth={lineWidth} />;
 });
-
-export default Curve;
