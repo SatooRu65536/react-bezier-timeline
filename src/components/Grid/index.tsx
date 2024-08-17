@@ -11,7 +11,7 @@ type Props = GridStyle & {
 };
 
 export const Grid = memo(
-  ({ width, height, xRange, yRange, xStep: xStep_, yStep: yStep_, color, weight, opacity }: Props) => {
+  ({ width, height, xRange, yRange, xStep: xStep_, yStep: yStep_, hidden, color, weight, opacity }: Props) => {
     const xStep = xStep_ ?? 50;
     const yStep = yStep_ ?? 50;
 
@@ -21,34 +21,38 @@ export const Grid = memo(
 
     return (
       <g>
-        <g>
-          {xLines.map((x, i) => (
-            <line
-              key={i}
-              x1={x}
-              y1={yRange[0]}
-              x2={x}
-              y2={yRange[1]}
-              stroke={color}
-              strokeWidth={weight}
-              style={{ opacity }}
-            />
-          ))}
-        </g>
-        <g>
-          {yLines.map((y, i) => (
-            <line
-              key={i}
-              x1={xRange[0]}
-              y1={y}
-              x2={xRange[1]}
-              y2={y}
-              stroke={color}
-              strokeWidth={weight}
-              style={{ opacity }}
-            />
-          ))}
-        </g>
+        {hidden !== true && (
+          <>
+            <g>
+              {xLines.map((x, i) => (
+                <line
+                  key={i}
+                  x1={x}
+                  y1={yRange[0]}
+                  x2={x}
+                  y2={yRange[1]}
+                  stroke={color}
+                  strokeWidth={weight}
+                  style={{ opacity }}
+                />
+              ))}
+            </g>
+            <g>
+              {yLines.map((y, i) => (
+                <line
+                  key={i}
+                  x1={xRange[0]}
+                  y1={y}
+                  x2={xRange[1]}
+                  y2={y}
+                  stroke={color}
+                  strokeWidth={weight}
+                  style={{ opacity }}
+                />
+              ))}
+            </g>
+          </>
+        )}
       </g>
     );
   },
