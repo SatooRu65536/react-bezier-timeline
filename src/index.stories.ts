@@ -15,10 +15,10 @@ type Story = StoryObj<typeof meta>;
 const tmpBezierCurve: BezierCurve = [
   {
     position: { x: 0, y: 0 },
-    handleR: { x: 100, y: 0 },
+    handleR: { x: 100, y: 50 },
   },
   {
-    handleL: { x: 0, y: 0 },
+    handleL: { x: -100, y: -20 },
     position: { x: 100, y: 100 },
   },
   {
