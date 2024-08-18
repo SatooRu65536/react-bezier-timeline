@@ -1,4 +1,4 @@
-import { BezierCurve, ViewRange } from '@/types';
+import { BezierCurve, Point, ViewRange } from '@/types';
 
 /**
  * 配列をペアにして返す
@@ -97,4 +97,69 @@ export function getLineLabels(
 
     return { position, label };
   });
+}
+
+function getLeftRightPoint(x: number, bezierCurve: BezierCurve): [Point, Point, number] | undefined {
+  if (bezierCurve.length === 0) return undefined;
+
+  const { p: left, i: index } = bezierCurve.reduce(
+    (acc, point, i) => {
+      const diff = x - point.position.x;
+      const minDiff = x - acc.p.position.x;
+      if (diff >= 0 && minDiff > diff) return { p: bezierCurve[i], i };
+      return acc;
+    },
+    { p: bezierCurve[0], i: 0 },
+  );
+
+  const right = bezierCurve[index + 1] ?? left;
+  if (!right) return undefined;
+
+  return [left, right, index];
+}
+
+function cubicBezier(t: number, p0: number, p1: number, p2: number, p3: number): number {
+  const mt = 1 - t;
+  return mt * mt * mt * p0 + 3 * mt * mt * t * p1 + 3 * mt * t * t * p2 + t * t * t * p3;
+}
+
+/**
+ * ベジェ曲線の y 座標を取得する
+ * @param {number} x - x 座標
+ * @param {BezierCurve} bezierCurve - ベジェ曲線
+ * @returns {number | undefined} - y 座標
+ */
+export function getBezierY(x: number, bezierCurve: BezierCurve): { y: number; index: number } | undefined {
+  // 指定された x に対応する左と右のポイントを取得
+  const points = getLeftRightPoint(x, bezierCurve);
+  if (!points) return undefined;
+
+  const [left, right, index] = points;
+
+  // 左側のポイントのハンドル位置を計算
+  const p0 = left.position;
+  const p1 = left.handleR ? { x: p0.x + left.handleR.x, y: p0.y + left.handleR.y } : p0;
+  // 右側のポイントのハンドル位置を計算
+  const p3 = right.position;
+  const p2 = right.handleL ? { x: p3.x + right.handleL.x, y: p3.y + right.handleL.y } : p3;
+
+  // ニュートン法やバイナリサーチで t を求めて y を返す
+  let t = 0.5;
+  let lower = 0;
+  let upper = 1;
+
+  for (let j = 0; j < 20; j++) {
+    const xt = cubicBezier(t, p0.x, p1.x, p2.x, p3.x);
+    if (Math.abs(xt - x) < 0.001) {
+      return { y: cubicBezier(t, p0.y, p1.y, p2.y, p3.y), index };
+    }
+    if (xt < x) {
+      lower = t;
+    } else {
+      upper = t;
+    }
+    t = (lower + upper) / 2;
+  }
+
+  return { y: cubicBezier(t, p0.y, p1.y, p2.y, p3.y), index };
 }

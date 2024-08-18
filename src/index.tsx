@@ -151,15 +151,24 @@ export default function BezierTimeline({
   labelStyle = defaultLabelStyle,
 }: BezierTimelineProps) {
   const isMetaKeyDown = useKeyDown('Meta');
-  const { isSelected, bezierCurve, xRange, yRange, onPointDragStart, onHandleDragStart, onDrag, onDragEnd } =
-    useBezierCurve({
-      defaultBezierCurve,
-      width,
-      height,
-      defaultXRange,
-      defaultYRange,
-      isMetaKeyDown,
-    });
+  const {
+    isSelected,
+    bezierCurve,
+    xRange,
+    yRange,
+    handleAddPoint,
+    onPointDragStart,
+    onHandleDragStart,
+    onDrag,
+    onDragEnd,
+  } = useBezierCurve({
+    defaultBezierCurve,
+    width,
+    height,
+    defaultXRange,
+    defaultYRange,
+    isMetaKeyDown,
+  });
 
   const convertedBezierCurve = useMemo(
     () => toDrawPoints(bezierCurve, width, height, xRange, yRange),
@@ -167,7 +176,14 @@ export default function BezierTimeline({
   );
 
   return (
-    <SVG width={width} height={height} isSelected={isSelected} onDrag={onDrag} onDragEnd={onDragEnd}>
+    <SVG
+      width={width}
+      height={height}
+      isSelected={isSelected}
+      onDrag={onDrag}
+      onDragEnd={onDragEnd}
+      handleAddPoint={handleAddPoint}
+    >
       <Grid width={width} height={height} xRange={xRange} yRange={yRange} {...gridStyle} />
       <Label width={width} height={height} xRange={xRange} yRange={yRange} {...labelStyle} />
       <Curves bezierCurve={convertedBezierCurve} lineStyle={lineStyle} />

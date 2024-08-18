@@ -1,4 +1,5 @@
 import {
+  AddPointHandler,
   BezierCurve,
   DragEndHandler,
   DragHandler,
@@ -9,7 +10,7 @@ import {
   ViewDragStartHandler,
   ViewRange,
 } from '@/types';
-import { getViewRatio } from '@/utils';
+import { getBezierY, getViewRatio } from '@/utils';
 import { useCallback, useMemo, useState } from 'react';
 
 interface SelectedHandle {
@@ -58,6 +59,33 @@ export const useBezierCurve = ({
   const [ratioX, ratioY] = useMemo(
     () => getViewRatio(width, height, defaultXRange, defaultYRange),
     [defaultXRange, defaultYRange, height, width],
+  );
+
+  /**
+   * ポイントを追加する
+   *
+   * @param {number} x - x座標
+   */
+  const handleAddPoint: AddPointHandler = useCallback(
+    (mouseX: number, mouseY: number) => {
+      // mouseX, mouseY を実座標に変換
+      const x = xRange[0] + mouseX / ratioX;
+      const y = yRange[0] + (height - mouseY) / ratioY;
+
+      const r = getBezierY(x, bezierCurve);
+      if (r === undefined) {
+        console.warn('Out of range');
+        return;
+      }
+      const { index } = r;
+      const newPoint: Position = { x, y };
+      const clonedBezierCurve = structuredClone(bezierCurve);
+
+      const prev = clonedBezierCurve.slice(0, index + 1);
+      const next = clonedBezierCurve.slice(index + 1);
+      setBezierCurve([...prev, { position: newPoint }, ...next]);
+    },
+    [bezierCurve, height, ratioX, ratioY, xRange, yRange],
   );
 
   /**
@@ -200,6 +228,7 @@ export const useBezierCurve = ({
     bezierCurve,
     xRange,
     yRange,
+    handleAddPoint,
     setBezierCurve,
     onPointDragStart,
     onHandleDragStart,
