@@ -1,11 +1,3 @@
-.svg {
-  cursor: grab;
-}
-
-.svg[data-dragging="true"] {
-  cursor: grabbing;
-}
-
 .svg[data-selected="true"] {
   cursor: none;
 }

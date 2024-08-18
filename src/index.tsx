@@ -153,7 +153,6 @@ export default function BezierTimeline({
     yRange,
     onPointDragStart,
     onHandleDragStart,
-    onViewDragStart,
     onDrag,
     onDragEnd,
   } = useBezierCurve({
@@ -172,8 +171,6 @@ export default function BezierTimeline({
       height={height}
       isSelected={isSelected}
       onDrag={onDrag}
-      onViewDragStart={onViewDragStart}
-      onDragEnd={onDragEnd}
     >
       <Grid width={width} height={height} xRange={xRange} yRange={yRange} {...gridStyle} />
       <Label width={width} height={height} xRange={xRange} yRange={yRange} {...labelStyle} />
