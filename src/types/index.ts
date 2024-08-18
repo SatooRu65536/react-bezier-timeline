@@ -15,7 +15,7 @@ export type ViewRange = [number, number];
 
 export type HandleType = keyof Pick<Point, 'handleL' | 'handleR'>;
 
-export type ViewDragStartHandler = (index: number, mouseX: number, mouseY: number) => void;
+export type ViewDragStartHandler = (mouseX: number, mouseY: number) => void;
 export type PointDragStartHandler = (index: number, mouseX: number, mouseY: number) => void;
 export type HandleDragStartHandler = (index: number, mouseX: number, mouseY: number, type: HandleType) => void;
 export type DragHandler = (mouseX: number, mouseY: number) => void;

@@ -7,34 +7,56 @@ import {
   PointDragStartHandler,
   Position,
   ViewDragStartHandler,
+  ViewRange,
 } from '@/types';
+import { getViewRatio } from '@/utils';
 import { useCallback, useMemo, useState } from 'react';
 
 interface SelectedHandle {
   type: 'handle';
+  index: number;
   handleType: HandleType;
+  initPos: Position;
 }
 interface SelectedPoint {
   type: 'point';
+  index: number;
+  initPos: Position;
 }
 interface SelectedView {
   type: 'view';
+  initXRange: ViewRange;
+  initYRange: ViewRange;
 }
 type SelectedElement = {
-  index: number;
-  initPos: Position;
   initMousePos: Position;
 } & (SelectedHandle | SelectedPoint | SelectedView);
 
 export interface BezierCurveProps {
   defaultBezierCurve?: BezierCurve;
-  ratioX: number;
-  ratioY: number;
+  width: number;
+  height: number;
+  defaultXRange: ViewRange;
+  defaultYRange: ViewRange;
 }
 
-export const useBezierCurve = ({ defaultBezierCurve, ratioX, ratioY }: BezierCurveProps) => {
+export const useBezierCurve = ({
+  defaultBezierCurve,
+  width,
+  height,
+  defaultXRange,
+  defaultYRange,
+}: BezierCurveProps) => {
   const [bezierCurve, setBezierCurve] = useState<BezierCurve>(defaultBezierCurve ?? []);
   const [selectElement, setSelectElement] = useState<SelectedElement>();
+
+  const [xRange, setXRange] = useState<ViewRange>(defaultXRange);
+  const [yRange, setYRange] = useState<ViewRange>(defaultYRange);
+
+  const [ratioX, ratioY] = useMemo(
+    () => getViewRatio(width, height, defaultXRange, defaultYRange),
+    [defaultXRange, defaultYRange, height, width],
+  );
 
   /**
    * ポイントのドラッグ開始
@@ -90,9 +112,15 @@ export const useBezierCurve = ({ defaultBezierCurve, ratioX, ratioY }: BezierCur
    * @param {number} x ドラッグ開始時のマウスのx座標
    * @param {number} y ドラッグ開始時のマウスのy座標
    */
-  const onViewDragStart: ViewDragStartHandler = useCallback((x: number, y: number) => {
-    console.log('onViewDragStart', x, y);
-  }, []);
+  const onViewDragStart: ViewDragStartHandler = useCallback(
+    (x: number, y: number) => {
+      const initMousePos = { x, y };
+      const initXRange = structuredClone(xRange);
+      const initYRange = structuredClone(yRange);
+      setSelectElement({ type: 'view', initMousePos, initXRange, initYRange });
+    },
+    [xRange, yRange],
+  );
 
   /**
    * ドラッグ中
@@ -104,6 +132,17 @@ export const useBezierCurve = ({ defaultBezierCurve, ratioX, ratioY }: BezierCur
   const onDrag: DragHandler = useCallback(
     (x: number, y: number) => {
       if (!selectElement) return;
+
+      if (selectElement.type === 'view') {
+        const { initMousePos } = selectElement;
+        const dx = (x - initMousePos.x) / ratioX;
+        const dy = (y - initMousePos.y) / ratioY;
+
+        const { initXRange, initYRange } = selectElement;
+        setXRange([initXRange[0] - dx, initXRange[1] - dx]);
+        setYRange([initYRange[0] + dy, initYRange[1] + dy]);
+        return;
+      }
 
       // ドラッグ中の要素を取得
       const { index } = selectElement;
@@ -145,11 +184,13 @@ export const useBezierCurve = ({ defaultBezierCurve, ratioX, ratioY }: BezierCur
   }, []);
 
   // 選択中か
-  const isSelected = useMemo(() => selectElement !== undefined, [selectElement]);
+  const isSelected = useMemo(() => !!selectElement && selectElement.type !== 'view', [selectElement]);
 
   return {
     isSelected,
     bezierCurve,
+    xRange,
+    yRange,
     setBezierCurve,
     onPointDragStart,
     onHandleDragStart,

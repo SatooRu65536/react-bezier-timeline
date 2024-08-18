@@ -85,14 +85,14 @@ export function getLineLabels(
   step: number,
   ratio: number,
   height?: number,
-): { label: number; position: number }[] {
+): { label: string; position: number }[] {
   const diff = (step - range[0]) % step;
 
   const length = Math.floor((range[1] - range[0]) / step) + 1;
   return Array.from({ length }, (_, i) => {
     const value = diff + step * i;
 
-    const label = range[0] + value;
+    const label = (range[0] + value).toFixed(1);
     const position = height ? height - value * ratio : value * ratio;
 
     return { position, label };

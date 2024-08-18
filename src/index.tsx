@@ -1,14 +1,18 @@
-import styles from './index.module.css';
-import { SVGProps } from 'react';
 import { BezierCurve, ViewRange } from './types';
-import { getViewRatio, toDrawPoints } from './utils';
+import { toDrawPoints } from './utils';
 import { Grid } from './components/Grid';
 import { Label } from './components/Label';
 import { Handles } from './components/Handles';
 import { Curves } from './components/Curves';
 import { Points } from './components/Points';
 import { useBezierCurve } from './hooks/useBezierCurve';
+import { SVG } from './components/SVG';
 
+// SVGの見た目
+export interface SvgStyle {
+  width: number;
+  height: number;
+}
 // 線の見た目
 export interface LineStyle {
   color?: string;
@@ -63,14 +67,12 @@ export interface LabelStyle {
   yPosition?: ('top' | 'bottom')[];
 }
 
-export type BezierTimelineProps = SVGProps<SVGSVGElement> & {
+export type BezierTimelineProps = SvgStyle & {
   defaultBezierCurve: BezierCurve;
 
   // 描画範囲
-  width?: number;
-  height?: number;
-  xRange?: ViewRange;
-  yRange?: ViewRange;
+  defaultXRange?: ViewRange;
+  defaultYRange?: ViewRange;
 
   // 見た目
   lineStyle?: LineStyle;
@@ -82,8 +84,8 @@ export type BezierTimelineProps = SVGProps<SVGSVGElement> & {
 
 const defaultWidth = 200;
 const defaultHeight = 200;
-const defaultXRange = [-10, defaultWidth + 10] satisfies ViewRange;
-const defaultYRange = [-10, defaultHeight + 10] satisfies ViewRange;
+const defaultXRange_ = [-10, defaultWidth + 10] satisfies ViewRange;
+const defaultYRange_ = [-10, defaultHeight + 10] satisfies ViewRange;
 const defaultLineStyle = {
   color: '#343A40',
   weight: 3,
@@ -133,36 +135,45 @@ const defaultLabelStyle = {
 } satisfies LabelStyle;
 
 export default function BezierTimeline({
+  defaultBezierCurve,
   width = defaultWidth,
   height = defaultHeight,
-  xRange = defaultXRange,
-  yRange = defaultYRange,
+  defaultXRange = defaultXRange_,
+  defaultYRange = defaultYRange_,
   lineStyle = defaultLineStyle,
   pointStyle = defaultPointStyle,
   handleStyle = defaultHandleStyle,
   gridStyle = defaultGridStyle,
   labelStyle = defaultLabelStyle,
-  ...props
 }: BezierTimelineProps) {
-  const { defaultBezierCurve, ...rest } = props;
-
-  const [ratioX, ratioY] = getViewRatio(width, height, xRange, yRange);
-  const { isSelected, bezierCurve, onPointDragStart, onHandleDragStart, onDrag, onDragEnd } = useBezierCurve({
+  const {
+    isSelected,
+    bezierCurve,
+    xRange,
+    yRange,
+    onPointDragStart,
+    onHandleDragStart,
+    onViewDragStart,
+    onDrag,
+    onDragEnd,
+  } = useBezierCurve({
     defaultBezierCurve,
-    ratioX,
-    ratioY,
+    width,
+    height,
+    defaultXRange,
+    defaultYRange,
   });
 
   const convertedBezierCurve = toDrawPoints(bezierCurve, width, height, xRange, yRange);
 
   return (
-    <svg
-      className={styles.svg}
+    <SVG
       width={width}
       height={height}
-      {...rest}
-      onMouseMove={(e) => onDrag(e.clientX, e.clientY)}
-      data-selected={isSelected}
+      isSelected={isSelected}
+      onDrag={onDrag}
+      onViewDragStart={onViewDragStart}
+      onDragEnd={onDragEnd}
     >
       <Grid width={width} height={height} xRange={xRange} yRange={yRange} {...gridStyle} />
       <Label width={width} height={height} xRange={xRange} yRange={yRange} {...labelStyle} />
@@ -181,6 +192,6 @@ export default function BezierTimeline({
         onDragStart={onPointDragStart}
         onDragEnd={onDragEnd}
       />
-    </svg>
+    </SVG>
   );
 }
