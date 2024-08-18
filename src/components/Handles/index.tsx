@@ -12,34 +12,37 @@ interface Props {
 }
 
 export const Handles = memo(({ bezierCurve, handleStyle, onDragStart, onDragEnd }: Props) => {
+  const { hide } = handleStyle;
+
   return (
     <g>
-      {bezierCurve.map((point, i) => (
-        <g key={i}>
-          {point.handleL != undefined && (
-            <Handle
-              index={i}
-              type="handleL"
-              position={point.handleL}
-              origin={point.position}
-              {...handleStyle}
-              onDragStart={onDragStart}
-              onDragEnd={onDragEnd}
-            />
-          )}
-          {point.handleR != undefined && (
-            <Handle
-              index={i}
-              type="handleR"
-              position={point.handleR}
-              origin={point.position}
-              {...handleStyle}
-              onDragStart={onDragStart}
-              onDragEnd={onDragEnd}
-            />
-          )}
-        </g>
-      ))}
+      {hide !== true &&
+        bezierCurve.map((point, i) => (
+          <g key={i}>
+            {point.handleL != undefined && (
+              <Handle
+                index={i}
+                type="handleL"
+                position={point.handleL}
+                origin={point.position}
+                {...handleStyle}
+                onDragStart={onDragStart}
+                onDragEnd={onDragEnd}
+              />
+            )}
+            {point.handleR != undefined && (
+              <Handle
+                index={i}
+                type="handleR"
+                position={point.handleR}
+                origin={point.position}
+                {...handleStyle}
+                onDragStart={onDragStart}
+                onDragEnd={onDragEnd}
+              />
+            )}
+          </g>
+        ))}
     </g>
   );
 });

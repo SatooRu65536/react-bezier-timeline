@@ -15,19 +15,27 @@ type Story = StoryObj<typeof meta>;
 const tmpBezierCurve: BezierCurve = [
   {
     position: { x: 0, y: 0 },
-    handleR: { x: 100, y: 50 },
+    handleR: { x: 50, y: 50 },
   },
   {
-    handleL: { x: -100, y: -20 },
-    position: { x: 100, y: 100 },
+    handleL: { x: -50, y: -20 },
+    position: { x: 50, y: 100 },
   },
   {
-    position: { x: 400, y: 200 },
+    position: { x: 200, y: 200 },
   },
 ];
 
 const width = 400;
 const height = 200;
+
+export const Default: Story = {
+  args: {
+    defaultBezierCurve: tmpBezierCurve,
+    width,
+    height,
+  },
+};
 
 export const Primary: Story = {
   args: {

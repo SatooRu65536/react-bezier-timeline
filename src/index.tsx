@@ -7,6 +7,7 @@ import { Curves } from './components/Curves';
 import { Points } from './components/Points';
 import { useBezierCurve } from './hooks/useBezierCurve';
 import { SVG } from './components/SVG';
+import { useKeyDown } from './hooks/useKeyDown';
 
 // SVGの見た目
 export interface SvgStyle {
@@ -32,6 +33,7 @@ export interface PointStyle {
 }
 // ハンドルの見た目
 export interface HandleStyle {
+  hide?: boolean;
   size?: number;
   color?: string;
   borderColor?: string;
@@ -102,6 +104,7 @@ const defaultPointStyle = {
   selectedBorderWeight: 2,
 } satisfies PointStyle;
 const defaultHandleStyle = {
+  hide: false,
   size: 5,
   color: '#ffffff',
   borderColor: '#007BFF',
@@ -146,32 +149,21 @@ export default function BezierTimeline({
   gridStyle = defaultGridStyle,
   labelStyle = defaultLabelStyle,
 }: BezierTimelineProps) {
-  const {
-    isSelected,
-    bezierCurve,
-    xRange,
-    yRange,
-    onPointDragStart,
-    onHandleDragStart,
-    onDrag,
-    onDragEnd,
-  } = useBezierCurve({
-    defaultBezierCurve,
-    width,
-    height,
-    defaultXRange,
-    defaultYRange,
-  });
+  const isMetaKeyDown = useKeyDown('Meta');
+  const { isSelected, bezierCurve, xRange, yRange, onPointDragStart, onHandleDragStart, onDrag, onDragEnd } =
+    useBezierCurve({
+      defaultBezierCurve,
+      width,
+      height,
+      defaultXRange,
+      defaultYRange,
+      isMetaKeyDown,
+    });
 
   const convertedBezierCurve = toDrawPoints(bezierCurve, width, height, xRange, yRange);
 
   return (
-    <SVG
-      width={width}
-      height={height}
-      isSelected={isSelected}
-      onDrag={onDrag}
-    >
+    <SVG width={width} height={height} isSelected={isSelected} onDrag={onDrag} onDragEnd={onDragEnd}>
       <Grid width={width} height={height} xRange={xRange} yRange={yRange} {...gridStyle} />
       <Label width={width} height={height} xRange={xRange} yRange={yRange} {...labelStyle} />
       <Curves bezierCurve={convertedBezierCurve} lineStyle={lineStyle} />

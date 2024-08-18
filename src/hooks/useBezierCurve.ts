@@ -38,6 +38,7 @@ export interface BezierCurveProps {
   height: number;
   defaultXRange: ViewRange;
   defaultYRange: ViewRange;
+  isMetaKeyDown: boolean;
 }
 
 export const useBezierCurve = ({
@@ -46,6 +47,7 @@ export const useBezierCurve = ({
   height,
   defaultXRange,
   defaultYRange,
+  isMetaKeyDown,
 }: BezierCurveProps) => {
   const [bezierCurve, setBezierCurve] = useState<BezierCurve>(defaultBezierCurve ?? []);
   const [selectElement, setSelectElement] = useState<SelectedElement>();
@@ -155,26 +157,33 @@ export const useBezierCurve = ({
       // ドラッグ中の座標を計算
       const { initPos, initMousePos } = selectElement;
       const dx = (x - initMousePos.x) / ratioX;
-      const dy = (y - initMousePos.y) / ratioY;
+      const dy = -(y - initMousePos.y) / ratioY;
 
       // ドラッグ中の座標を更新
       const clonedBezierCurve = structuredClone(bezierCurve);
-      if (selectElement.type === 'point') {
+      if (selectElement.type === 'point' && !isMetaKeyDown) {
+        // ポイントを動かす
         clonedBezierCurve[index].position = {
           x: initPos.x + dx,
-          y: initPos.y - dy,
+          y: initPos.y + dy,
         };
+      } else if (selectElement.type === 'point') {
+        // 両端のハンドルを動かす
+        const handleR: Position = { x: dx, y: dy };
+        const handleL: Position = { x: -dx, y: -dy };
+        clonedBezierCurve[index] = { position: initPos, handleL, handleR };
       } else if (selectElement.type === 'handle') {
         const x = initPos.x + dx;
-        const y = initPos.y - dy;
-        const isNear = Math.abs(x) < 10 && Math.abs(y) < 10;
+        const y = initPos.y + dy;
 
-        clonedBezierCurve[index][selectElement.handleType] = isNear ? { x: 0, y: 0 } : { x, y };
+        const isNear = Math.abs(x) < 10 && Math.abs(y) < 10;
+        if (isNear) delete clonedBezierCurve[index][selectElement.handleType];
+        else clonedBezierCurve[index][selectElement.handleType] = { x, y };
       }
 
       setBezierCurve(clonedBezierCurve);
     },
-    [bezierCurve, ratioX, ratioY, selectElement],
+    [bezierCurve, isMetaKeyDown, ratioX, ratioY, selectElement],
   );
   /**
    * ドラッグ終了
