@@ -1,0 +1,7 @@
+.svg[data-selected="true"] {
+  cursor: none;
+}
+
+.svg[data-selected="true"] * {
+  cursor: none;
+}

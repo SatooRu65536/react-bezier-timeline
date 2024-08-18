@@ -1,3 +1,7 @@
 .point {
   cursor: pointer;
 }
+
+.point[data-selected="true"] {
+  cursor: none;
+}

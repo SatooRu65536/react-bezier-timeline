@@ -1,3 +1,4 @@
+import styles from './index.module.css';
 import { SVGProps } from 'react';
 import { BezierCurve, ViewRange } from './types';
 import { getViewRatio, toDrawPoints } from './utils';
@@ -19,6 +20,11 @@ export interface PointStyle {
   color?: string;
   borderColor?: string;
   borderWeight?: number;
+
+  selectedSize?: number;
+  selectedColor?: string;
+  selectedBorderColor?: string;
+  selectedBorderWeight?: number;
 }
 // ハンドルの見た目
 export interface HandleStyle {
@@ -28,6 +34,13 @@ export interface HandleStyle {
   borderWidth?: number;
   lineColor?: string;
   lineWeight?: number;
+
+  selectedSize?: number;
+  selectedColor?: string;
+  selectedBorderColor?: string;
+  selectedBorderWeight?: number;
+  selectedLineColor?: string;
+  selectedLineWeight?: number;
 }
 // グリッドの見た目
 export interface GridStyle {
@@ -80,6 +93,11 @@ const defaultPointStyle = {
   color: '#ffffff',
   borderColor: '#007BFF',
   borderWeight: 2,
+
+  selectedSize: 4,
+  selectedColor: '#007BFF',
+  selectedBorderColor: '#007BFF',
+  selectedBorderWeight: 2,
 } satisfies PointStyle;
 const defaultHandleStyle = {
   size: 5,
@@ -88,6 +106,13 @@ const defaultHandleStyle = {
   borderWidth: 1,
   lineColor: '#000000',
   lineWeight: 1,
+
+  selectedSize: 5,
+  selectedColor: '#007BFF',
+  selectedBorderColor: '#007BFF',
+  selectedBorderWeight: 1,
+  selectedLineColor: '#000000',
+  selectedLineWeight: 1,
 } satisfies HandleStyle;
 const defaultGridStyle = {
   hidden: false,
@@ -122,7 +147,7 @@ export default function BezierTimeline({
   const { defaultBezierCurve, ...rest } = props;
 
   const [ratioX, ratioY] = getViewRatio(width, height, xRange, yRange);
-  const { bezierCurve, onPointDragStart, onHandleDragStart, onDrag, onDragEnd } = useBezierCurve({
+  const { isSelected, bezierCurve, onPointDragStart, onHandleDragStart, onDrag, onDragEnd } = useBezierCurve({
     defaultBezierCurve,
     ratioX,
     ratioY,
@@ -131,7 +156,14 @@ export default function BezierTimeline({
   const convertedBezierCurve = toDrawPoints(bezierCurve, width, height, xRange, yRange);
 
   return (
-    <svg width={width} height={height} {...rest} onMouseMove={(e) => onDrag(e.clientX, e.clientY)}>
+    <svg
+      className={styles.svg}
+      width={width}
+      height={height}
+      {...rest}
+      onMouseMove={(e) => onDrag(e.clientX, e.clientY)}
+      data-selected={isSelected}
+    >
       <Grid width={width} height={height} xRange={xRange} yRange={yRange} {...gridStyle} />
       <Label width={width} height={height} xRange={xRange} yRange={yRange} {...labelStyle} />
       <Curves bezierCurve={convertedBezierCurve} lineStyle={lineStyle} />

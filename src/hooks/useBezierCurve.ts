@@ -4,12 +4,11 @@ import {
   DragHandler,
   HandleDragStartHandler,
   HandleType,
-  Point,
   PointDragStartHandler,
   Position,
   ViewDragStartHandler,
 } from '@/types';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 interface SelectedHandle {
   type: 'handle';
@@ -106,6 +105,7 @@ export const useBezierCurve = ({ defaultBezierCurve, ratioX, ratioY }: BezierCur
     (x: number, y: number) => {
       if (!selectElement) return;
 
+      // ドラッグ中の要素を取得
       const { index } = selectElement;
       const point = bezierCurve.at(index);
       if (!point) {
@@ -113,22 +113,26 @@ export const useBezierCurve = ({ defaultBezierCurve, ratioX, ratioY }: BezierCur
         return;
       }
 
+      // ドラッグ中の座標を計算
       const { initPos, initMousePos } = selectElement;
       const dx = (x - initMousePos.x) / ratioX;
       const dy = (y - initMousePos.y) / ratioY;
-      const clonedBezierCurve = structuredClone(bezierCurve);
 
+      // ドラッグ中の座標を更新
+      const clonedBezierCurve = structuredClone(bezierCurve);
       if (selectElement.type === 'point') {
         clonedBezierCurve[index].position = {
           x: initPos.x + dx,
           y: initPos.y - dy,
         };
       } else if (selectElement.type === 'handle') {
-        clonedBezierCurve[index][selectElement.handleType] = {
-          x: initPos.x + dx,
-          y: initPos.y - dy,
-        };
+        const x = initPos.x + dx;
+        const y = initPos.y - dy;
+        const isNear = Math.abs(x) < 10 && Math.abs(y) < 10;
+
+        clonedBezierCurve[index][selectElement.handleType] = isNear ? { x: 0, y: 0 } : { x, y };
       }
+
       setBezierCurve(clonedBezierCurve);
     },
     [bezierCurve, ratioX, ratioY, selectElement],
@@ -140,7 +144,11 @@ export const useBezierCurve = ({ defaultBezierCurve, ratioX, ratioY }: BezierCur
     setSelectElement(undefined);
   }, []);
 
+  // 選択中か
+  const isSelected = useMemo(() => selectElement !== undefined, [selectElement]);
+
   return {
+    isSelected,
     bezierCurve,
     setBezierCurve,
     onPointDragStart,

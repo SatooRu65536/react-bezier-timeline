@@ -1,6 +1,6 @@
 import styles from './index.module.css';
 import { DragEndHandler, PointDragStartHandler, Position } from '@/types';
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { PointStyle } from '@/index';
 
 type Props = PointStyle & {
@@ -12,18 +12,43 @@ type Props = PointStyle & {
 };
 
 export const Point = memo(
-  ({ position, index, size, color, borderColor, borderWeight, onDragStart, onDragEnd }: Props) => {
+  ({
+    position,
+    index,
+    size,
+    color,
+    borderColor,
+    borderWeight,
+    selectedSize,
+    selectedColor,
+    selectedBorderColor,
+    selectedBorderWeight,
+    onDragStart,
+    onDragEnd,
+  }: Props) => {
+    const [isSelected, setIsSelected] = useState(false);
+
+    const handleOnMouseDown = (e: React.MouseEvent<SVGCircleElement, MouseEvent>) => {
+      setIsSelected(true);
+      onDragStart(index, e.clientX, e.clientY);
+    };
+
+    const handleOnMouseUp = () => {
+      setIsSelected(false);
+      onDragEnd();
+    };
+
     return (
       <circle
         className={styles.point}
         cx={position.x}
         cy={position.y}
-        r={size}
-        fill={color}
-        stroke={borderColor}
-        strokeWidth={borderWeight}
-        onMouseDown={(e) => onDragStart(index, e.clientX, e.clientY)}
-        onMouseUp={onDragEnd}
+        r={isSelected ? selectedSize : size}
+        fill={isSelected ? selectedColor : color}
+        stroke={isSelected ? selectedBorderColor : borderColor}
+        strokeWidth={isSelected ? selectedBorderWeight : borderWeight}
+        onMouseDown={handleOnMouseDown}
+        onMouseUp={handleOnMouseUp}
       />
     );
   },
