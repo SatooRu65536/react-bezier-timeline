@@ -8,7 +8,7 @@ import { Points } from './components/Points';
 import { useBezierCurve } from './hooks/useBezierCurve';
 import { SVG } from './components/SVG';
 import { useKeyDown } from './hooks/useKeyDown';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 // SVGの見た目
 export interface SvgStyle {
@@ -34,7 +34,6 @@ export interface PointStyle {
 }
 // ハンドルの見た目
 export interface HandleStyle {
-  hide?: boolean;
   size?: number;
   color?: string;
   borderColor?: string;
@@ -105,7 +104,6 @@ const defaultPointStyle = {
   selectedBorderWeight: 2,
 } satisfies PointStyle;
 const defaultHandleStyle = {
-  hide: false,
   size: 5,
   color: '#ffffff',
   borderColor: '#007BFF',
@@ -169,6 +167,7 @@ export default function BezierTimeline({
     defaultYRange,
     isMetaKeyDown,
   });
+  const [mouseEnter, setMouseEnter] = useState(false);
 
   const convertedBezierCurve = useMemo(
     () => toDrawPoints(bezierCurve, width, height, xRange, yRange),
@@ -182,6 +181,8 @@ export default function BezierTimeline({
       isSelected={isSelected}
       onDrag={onDrag}
       onDragEnd={onDragEnd}
+      onMouseEnter={() => setMouseEnter(true)}
+      onMouseLeave={() => setMouseEnter(false)}
       handleAddPoint={handleAddPoint}
     >
       <Grid width={width} height={height} xRange={xRange} yRange={yRange} {...gridStyle} />
@@ -189,6 +190,7 @@ export default function BezierTimeline({
       <Curves bezierCurve={convertedBezierCurve} lineStyle={lineStyle} />
 
       <Handles
+        hidden={!mouseEnter}
         bezierCurve={convertedBezierCurve}
         handleStyle={handleStyle}
         onDragStart={onHandleDragStart}

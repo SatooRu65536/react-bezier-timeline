@@ -9,11 +9,24 @@ type Props = SvgStyle & {
 
   onDrag: DragHandler;
   onDragEnd: DragEndHandler;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
   handleAddPoint: AddPointHandler;
 };
 
 export const SVG = memo(
-  ({ children, width, height, isSelected, onDrag, onDragEnd, handleAddPoint, ...props }: Props) => {
+  ({
+    children,
+    width,
+    height,
+    isSelected,
+    onDrag,
+    onDragEnd,
+    onMouseEnter,
+    onMouseLeave,
+    handleAddPoint,
+    ...props
+  }: Props) => {
     const onMouseMove: MouseEventHandler<SVGSVGElement> = (e) => {
       onDrag(e.clientX, e.clientY);
     };
@@ -33,6 +46,8 @@ export const SVG = memo(
         {...props}
         onMouseMove={onMouseMove}
         onMouseUp={onDragEnd}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
         onContextMenu={onContextMenu}
         data-selected={isSelected}
       >
