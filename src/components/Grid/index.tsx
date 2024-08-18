@@ -25,9 +25,9 @@ export const Grid = memo(
                 <line
                   key={i}
                   x1={x.position}
-                  y1={yRange[0]}
+                  y1={0}
                   x2={x.position}
-                  y2={yRange[1]}
+                  y2={yRange[1] - yRange[0]}
                   stroke={color}
                   strokeWidth={weight}
                   style={{ opacity }}
@@ -38,9 +38,9 @@ export const Grid = memo(
               {yLineLabels.map((y, i) => (
                 <line
                   key={i}
-                  x1={xRange[0]}
+                  x1={0}
                   y1={y.position}
-                  x2={xRange[1]}
+                  x2={xRange[1] - xRange[0]}
                   y2={y.position}
                   stroke={color}
                   strokeWidth={weight}

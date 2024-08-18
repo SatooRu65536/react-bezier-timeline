@@ -88,7 +88,7 @@ export function getLineLabels(
 ): { label: string; position: number }[] {
   const diff = (step - range[0]) % step;
 
-  const length = Math.floor((range[1] - range[0]) / step) + 1;
+  const length = Math.floor((range[1] - range[0]) / step) + 2;
   return Array.from({ length }, (_, i) => {
     const value = diff + step * i;
 
