@@ -1,12 +1,12 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import BezierTimeline from ".";
-import { BezierCurve } from "./types";
+import type { Meta, StoryObj } from '@storybook/react';
+import BezierTimeline from '.';
+import { BezierCurve } from './types';
 
 const meta = {
-  title: "BezierTimeline",
+  title: 'BezierTimeline',
   component: BezierTimeline,
-  parameters: { layout: "centered" },
-  tags: ["autodocs"],
+  parameters: { layout: 'centered' },
+  tags: ['autodocs'],
 } satisfies Meta<typeof BezierTimeline>;
 
 export default meta;
@@ -34,7 +34,7 @@ export const Primary: Story = {
     bezierCurve: tmpBezierCurve,
     width,
     height,
-    // xRange: [0, width],
-    // yRange: [0, height],
+    xRange: [-10, width + 10],
+    yRange: [-10, height + 10],
   },
 };

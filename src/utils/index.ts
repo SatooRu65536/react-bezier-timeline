@@ -80,9 +80,11 @@ export function toDrawPoints(
  * @param {number} step - 間隔
  * @returns {number[]} - 線の座標の配列
  */
-export function getLines(range: ViewRange, step_: number, ratio: number): number[] {
-  const step = step_ * ratio;
-  return Array.from({ length: Math.floor((range[1] - range[0]) / step) + 3 }, (_, i) => {
-    return step * (i - 1) - (range[0] % step);
+export function getLines(range: ViewRange, step: number, ratio: number): number[] {
+  const diff = (step - range[0]) % step;
+
+  const length = Math.floor((range[1] - range[0]) / step) + 1;
+  return Array.from({ length }, (_, i) => {
+    return (diff + step * i) * ratio;
   });
 }
