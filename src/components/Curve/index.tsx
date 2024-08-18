@@ -10,7 +10,7 @@ interface Props {
   width?: number;
 }
 
-export const Curve = memo(function ({ left, right, color, width }: Props) {
+export const Curve = memo(({ left, right, color, width }: Props) => {
   // 開始
   const sx = left.position.x;
   const sy = left.position.y;

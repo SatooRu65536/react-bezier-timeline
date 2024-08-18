@@ -66,49 +66,57 @@ type Props = SVGProps<SVGSVGElement> & {
   labelStyle?: LabelStyle;
 };
 
+export const defaultWidth = 200;
+export const defaultHeight = 200;
+export const defaultXRange = [-10, defaultWidth + 10] satisfies ViewRange;
+export const defaultYRange = [-10, defaultHeight + 10] satisfies ViewRange;
+export const defaultLineStyle = {
+  color: '#343A40',
+  weight: 3,
+} satisfies LineStyle;
+export const defaultPointStyle = {
+  size: 4,
+  color: '#ffffff',
+  borderColor: '#007BFF',
+  borderWeight: 2,
+} satisfies PointStyle;
+export const defaultHandleStyle = {
+  size: 5,
+  color: '#ffffff',
+  borderColor: '#007BFF',
+  borderWidth: 1,
+  lineColor: '#000000',
+  lineWeight: 1,
+} satisfies HandleStyle;
+export const defaultGridStyle = {
+  hidden: false,
+  xStep: 50,
+  yStep: 50,
+  color: '#000000',
+  weight: 1,
+  opacity: 0.2,
+} satisfies GridStyle;
+export const defaultLabelStyle = {
+  hidden: false,
+  size: 12,
+  color: '#000000',
+  xStep: defaultGridStyle.xStep,
+  yStep: defaultGridStyle.yStep,
+  xPosition: ['left'],
+  yPosition: ['bottom'],
+} satisfies LabelStyle;
+
 export default function BezierTimeline({
   bezierCurve,
-  width = 200,
-  height = 200,
-  xRange = [-10, width + 10],
-  yRange = [-10, height + 10],
-
-  lineStyle = {
-    color: '#343A40',
-    weight: 3,
-  },
-  pointStyle = {
-    size: 4,
-    color: '#ffffff',
-    borderColor: '#007BFF',
-    borderWeight: 2,
-  },
-  handleStyle = {
-    size: 5,
-    color: '#ffffff',
-    borderColor: '#007BFF',
-    borderWidth: 1,
-    lineColor: '#000000',
-    lineWeight: 1,
-  },
-  gridStyle = {
-    hidden: false,
-    xStep: 50,
-    yStep: 50,
-    color: '#000000',
-    weight: 1,
-    opacity: 0.2,
-  },
-  labelStyle = {
-    hidden: false,
-    size: 12,
-    color: '#000000',
-    xStep: gridStyle.xStep,
-    yStep: gridStyle.yStep,
-    xPosition: ['left'],
-    yPosition: ['bottom'],
-  },
-
+  width = defaultWidth,
+  height = defaultHeight,
+  xRange = defaultXRange,
+  yRange = defaultYRange,
+  lineStyle = defaultLineStyle,
+  pointStyle = defaultPointStyle,
+  handleStyle = defaultHandleStyle,
+  gridStyle = defaultGridStyle,
+  labelStyle = defaultLabelStyle,
   ...props
 }: Props) {
   const convertedBezierCurve = toDrawPoints(bezierCurve, width, height, xRange, yRange);

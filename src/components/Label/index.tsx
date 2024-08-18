@@ -35,7 +35,7 @@ export const Label = memo(
     return (
       <g className={styles.labels}>
         {yLineLabels.map((lineLabel, i) => (
-          <g>
+          <g key={lineLabel.label}>
             {xPosition.includes('left') && (
               <text
                 key={i}
@@ -65,7 +65,7 @@ export const Label = memo(
         ))}
 
         {xLineLabels.map((lineLabel, i) => (
-          <g>
+          <g key={lineLabel.label}>
             {yPosition.includes('top') && (
               <text
                 key={i}
