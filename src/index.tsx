@@ -1,11 +1,11 @@
 import { SVGProps } from 'react';
-import { Curve } from './components/Curve';
 import { BezierCurve, ViewRange } from './types';
-import { mapPairs, toDrawPoints } from './utils';
-import { Point } from './components/Point';
-import { Handle } from './components/Handle';
+import { toDrawPoints } from './utils';
 import { Grid } from './components/Grid';
 import { Label } from './components/Label';
+import { Handles } from './components/Handles';
+import { Curves } from './components/Curves';
+import { Points } from './components/Points';
 
 // 線の見た目
 export interface LineStyle {
@@ -124,23 +124,11 @@ export default function BezierTimeline({
   return (
     <svg width={width} height={height} {...props}>
       <Grid width={width} height={height} xRange={xRange} yRange={yRange} {...gridStyle} />
-
       <Label width={width} height={height} xRange={xRange} yRange={yRange} {...labelStyle} />
 
-      {convertedBezierCurve.map((point, i) => (
-        <g key={i}>
-          {point.handleL != undefined && <Handle position={point.handleL} origin={point.position} {...handleStyle} />}
-          {point.handleR != undefined && <Handle position={point.handleR} origin={point.position} {...handleStyle} />}
-        </g>
-      ))}
-
-      {mapPairs(convertedBezierCurve).map(([left, right], i) => (
-        <Curve key={i} left={left} right={right} {...lineStyle} />
-      ))}
-
-      {convertedBezierCurve.map((point, i) => (
-        <Point key={i} position={point.position} {...pointStyle} />
-      ))}
+      <Handles bezierCurve={convertedBezierCurve} handleStyle={handleStyle} />
+      <Curves bezierCurve={convertedBezierCurve} lineStyle={lineStyle} />
+      <Points bezierCurve={convertedBezierCurve} pointStyle={pointStyle} />
     </svg>
   );
 }
