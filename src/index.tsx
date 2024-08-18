@@ -66,21 +66,21 @@ type Props = SVGProps<SVGSVGElement> & {
   labelStyle?: LabelStyle;
 };
 
-export const defaultWidth = 200;
-export const defaultHeight = 200;
-export const defaultXRange = [-10, defaultWidth + 10] satisfies ViewRange;
-export const defaultYRange = [-10, defaultHeight + 10] satisfies ViewRange;
-export const defaultLineStyle = {
+const defaultWidth = 200;
+const defaultHeight = 200;
+const defaultXRange = [-10, defaultWidth + 10] satisfies ViewRange;
+const defaultYRange = [-10, defaultHeight + 10] satisfies ViewRange;
+const defaultLineStyle = {
   color: '#343A40',
   weight: 3,
 } satisfies LineStyle;
-export const defaultPointStyle = {
+const defaultPointStyle = {
   size: 4,
   color: '#ffffff',
   borderColor: '#007BFF',
   borderWeight: 2,
 } satisfies PointStyle;
-export const defaultHandleStyle = {
+const defaultHandleStyle = {
   size: 5,
   color: '#ffffff',
   borderColor: '#007BFF',
@@ -88,7 +88,7 @@ export const defaultHandleStyle = {
   lineColor: '#000000',
   lineWeight: 1,
 } satisfies HandleStyle;
-export const defaultGridStyle = {
+const defaultGridStyle = {
   hidden: false,
   xStep: 50,
   yStep: 50,
@@ -96,7 +96,7 @@ export const defaultGridStyle = {
   weight: 1,
   opacity: 0.2,
 } satisfies GridStyle;
-export const defaultLabelStyle = {
+const defaultLabelStyle = {
   hidden: false,
   size: 12,
   color: '#000000',

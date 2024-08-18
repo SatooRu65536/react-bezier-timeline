@@ -9,6 +9,11 @@ export default tseslint.config(
   pluginReact.configs.flat.recommended,
   { ignores: ['dist'] },
   {
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
     rules: {
       'react/boolean-prop-naming': ['error', { validateNested: true }],
       'react/checked-requires-onchange-or-readonly': 'error',
@@ -31,7 +36,6 @@ export default tseslint.config(
       'react/jsx-curly-brace-presence': ['error', { props: 'never', children: 'never' }],
       'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],
       'react/jsx-fragments': ['error', 'syntax'],
-      'react/jsx-handler-names': 'error',
       'react/jsx-max-depth': ['error', { max: 4 }],
       'react/jsx-no-bind': ['error', { allowArrowFunctions: true }],
       'react/jsx-no-constructed-context-values': 'error',
@@ -40,7 +44,6 @@ export default tseslint.config(
       'react/jsx-no-useless-fragment': 'error',
       'react/jsx-one-expression-per-line': ['error', { allow: 'single-child' }],
       'react/jsx-props-no-multi-spaces': 'error',
-      'react/jsx-sort-props': ['error', { callbacksLast: true, shorthandFirst: true, ignoreCase: true }],
       'react/jsx-wrap-multilines': [
         'error',
         {
@@ -85,9 +88,7 @@ export default tseslint.config(
       'react/state-in-constructor': ['error', 'always'],
       'react/static-property-placement': ['error', 'property assignment'],
       'react/react-in-jsx-scope': 'off',
-      'react/jsx-sort-props': 'off',
       'react/display-name': 'off',
-      'react/jsx-handler-names': 'off',
     },
   },
   {
