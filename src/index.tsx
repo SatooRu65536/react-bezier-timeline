@@ -8,6 +8,7 @@ import { Points } from './components/Points';
 import { useBezierCurve } from './hooks/useBezierCurve';
 import { SVG } from './components/SVG';
 import { useKeyDown } from './hooks/useKeyDown';
+import { useMemo } from 'react';
 
 // SVGの見た目
 export interface SvgStyle {
@@ -160,7 +161,10 @@ export default function BezierTimeline({
       isMetaKeyDown,
     });
 
-  const convertedBezierCurve = toDrawPoints(bezierCurve, width, height, xRange, yRange);
+  const convertedBezierCurve = useMemo(
+    () => toDrawPoints(bezierCurve, width, height, xRange, yRange),
+    [bezierCurve, height, width, xRange, yRange],
+  );
 
   return (
     <SVG width={width} height={height} isSelected={isSelected} onDrag={onDrag} onDragEnd={onDragEnd}>
