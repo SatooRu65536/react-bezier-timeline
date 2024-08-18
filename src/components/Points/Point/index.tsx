@@ -1,5 +1,5 @@
 import styles from './index.module.css';
-import { DragEndHandler, DragStartHandler, Position } from '@/types';
+import { DragEndHandler, PointDragStartHandler, Position } from '@/types';
 import { memo } from 'react';
 import { PointStyle } from '@/index';
 
@@ -7,7 +7,7 @@ type Props = PointStyle & {
   position: Position;
   index: number;
 
-  onDragStart: DragStartHandler;
+  onDragStart: PointDragStartHandler;
   onDragEnd: DragEndHandler;
 };
 

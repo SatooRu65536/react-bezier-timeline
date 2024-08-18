@@ -1,15 +1,33 @@
 import styles from './index.module.css';
-import { Position } from '@/types';
+import { DragEndHandler, HandleDragStartHandler, HandleType, Position } from '@/types';
 import { memo } from 'react';
 import { HandleStyle } from '@/index';
 
 type Props = HandleStyle & {
+  index: number;
+  type: HandleType;
   position: Position;
   origin: Position;
+
+  onDragStart: HandleDragStartHandler;
+  onDragEnd: DragEndHandler;
 };
 
 export const Handle = memo(
-  ({ position, origin, size: size_, color, borderColor, borderWidth, lineColor, lineWeight }: Props) => {
+  ({
+    index,
+    type,
+    position,
+    origin,
+    size: size_,
+    color,
+    borderColor,
+    borderWidth,
+    lineColor,
+    lineWeight,
+    onDragStart,
+    onDragEnd,
+  }: Props) => {
     const size = size_ ?? 0;
 
     const angle = Math.atan2(position.y, -position.x) * (180 / Math.PI) - 45;
@@ -39,6 +57,8 @@ export const Handle = memo(
             fill={color}
             stroke={borderColor}
             strokeWidth={borderWidth}
+            onMouseDown={(e) => onDragStart(index, e.clientX, e.clientY, type)}
+            onMouseUp={onDragEnd}
           />
         </g>
       </g>

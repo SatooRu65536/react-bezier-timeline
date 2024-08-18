@@ -122,7 +122,7 @@ export default function BezierTimeline({
   const { defaultBezierCurve, ...rest } = props;
 
   const [ratioX, ratioY] = getViewRatio(width, height, xRange, yRange);
-  const { bezierCurve, onPointDragStart, onDrag, onDragEnd } = useBezierCurve({
+  const { bezierCurve, onPointDragStart, onHandleDragStart, onDrag, onDragEnd } = useBezierCurve({
     defaultBezierCurve,
     ratioX,
     ratioY,
@@ -134,9 +134,15 @@ export default function BezierTimeline({
     <svg width={width} height={height} {...rest} onMouseMove={(e) => onDrag(e.clientX, e.clientY)}>
       <Grid width={width} height={height} xRange={xRange} yRange={yRange} {...gridStyle} />
       <Label width={width} height={height} xRange={xRange} yRange={yRange} {...labelStyle} />
-
-      <Handles bezierCurve={convertedBezierCurve} handleStyle={handleStyle} />
       <Curves bezierCurve={convertedBezierCurve} lineStyle={lineStyle} />
+
+      <Handles
+        bezierCurve={convertedBezierCurve}
+        handleStyle={handleStyle}
+        onDragStart={onHandleDragStart}
+        onDragEnd={onDragEnd}
+      />
+
       <Points
         bezierCurve={convertedBezierCurve}
         pointStyle={pointStyle}
