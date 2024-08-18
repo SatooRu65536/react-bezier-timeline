@@ -9,7 +9,7 @@ type Props = HandleStyle & {
 };
 
 export const Handle = memo(
-  ({ position, origin, size: size_, color, borderColor, borderWidth, lineColor, lineWidth }: Props) => {
+  ({ position, origin, size: size_, color, borderColor, borderWidth, lineColor, lineWeight }: Props) => {
     const size = size_ ?? 0;
 
     const angle = Math.atan2(position.y, -position.x) * (180 / Math.PI) - 45;
@@ -25,7 +25,7 @@ export const Handle = memo(
           x2={origin.x + position.x}
           y2={origin.y - position.y}
           stroke={lineColor}
-          strokeWidth={lineWidth}
+          strokeWidth={lineWeight}
         />
         <g transform={`translate(${x}, ${y})`}>
           <rect
