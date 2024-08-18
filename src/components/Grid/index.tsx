@@ -1,6 +1,6 @@
 import { GridStyle } from '@/index';
 import { ViewRange } from '@/types';
-import { getLines, getViewRatio } from '@/utils';
+import { getLineLabels, getViewRatio } from '@/utils';
 import { memo } from 'react';
 
 type Props = GridStyle & {
@@ -11,25 +11,22 @@ type Props = GridStyle & {
 };
 
 export const Grid = memo(
-  ({ width, height, xRange, yRange, xStep: xStep_, yStep: yStep_, hidden, color, weight, opacity }: Props) => {
-    const xStep = xStep_ ?? 50;
-    const yStep = yStep_ ?? 50;
-
+  ({ width, height, xRange, yRange, xStep = 50, yStep = 50, hidden, color, weight, opacity }: Props) => {
     const [ratioX, ratioY] = getViewRatio(width, height, xRange, yRange);
-    const xLines = getLines(xRange, xStep, ratioX); // 縦軸
-    const yLines = getLines(yRange, yStep, ratioY).map((y) => height - y); // 横軸
+    const xLineLabels = getLineLabels(xRange, xStep, ratioX); // 縦軸
+    const yLineLabels = getLineLabels(yRange, yStep, ratioY, height); // 横軸
 
     return (
       <g>
         {hidden !== true && (
           <>
             <g>
-              {xLines.map((x, i) => (
+              {xLineLabels.map((x, i) => (
                 <line
                   key={i}
-                  x1={x}
+                  x1={x.position}
                   y1={yRange[0]}
-                  x2={x}
+                  x2={x.position}
                   y2={yRange[1]}
                   stroke={color}
                   strokeWidth={weight}
@@ -38,13 +35,13 @@ export const Grid = memo(
               ))}
             </g>
             <g>
-              {yLines.map((y, i) => (
+              {yLineLabels.map((y, i) => (
                 <line
                   key={i}
                   x1={xRange[0]}
-                  y1={y}
+                  y1={y.position}
                   x2={xRange[1]}
-                  y2={y}
+                  y2={y.position}
                   stroke={color}
                   strokeWidth={weight}
                   style={{ opacity }}

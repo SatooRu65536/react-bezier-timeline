@@ -75,16 +75,26 @@ export function toDrawPoints(
 }
 
 /**
- * グリッドの線を取得する
+ * グリッドの線とラベルを取得する
  * @param {ViewRange} range - 範囲
  * @param {number} step - 間隔
- * @returns {number[]} - 線の座標の配列
+ * @returns { label: string; position: number }[] - 線の座標とラベルの配列
  */
-export function getLines(range: ViewRange, step: number, ratio: number): number[] {
+export function getLineLabels(
+  range: ViewRange,
+  step: number,
+  ratio: number,
+  height?: number,
+): { label: number; position: number }[] {
   const diff = (step - range[0]) % step;
 
   const length = Math.floor((range[1] - range[0]) / step) + 1;
   return Array.from({ length }, (_, i) => {
-    return (diff + step * i) * ratio;
+    const value = diff + step * i;
+
+    const label = range[0] + value;
+    const position = height ? height - value * ratio : value * ratio;
+
+    return { position, label };
   });
 }

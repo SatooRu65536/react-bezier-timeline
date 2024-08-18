@@ -5,13 +5,13 @@ import { mapPairs, toDrawPoints } from './utils';
 import { Point } from './components/Point';
 import { Handle } from './components/Handle';
 import { Grid } from './components/Grid';
+import { Label } from './components/Label';
 
 // 線の見た目
 export interface LineStyle {
   color?: string;
   weight?: number;
 }
-
 // 点の見た目
 export interface PointStyle {
   size?: number;
@@ -19,7 +19,6 @@ export interface PointStyle {
   borderColor?: string;
   borderWeight?: number;
 }
-
 // ハンドルの見た目
 export interface HandleStyle {
   size?: number;
@@ -29,7 +28,6 @@ export interface HandleStyle {
   lineColor?: string;
   lineWeight?: number;
 }
-
 // グリッドの見た目
 export interface GridStyle {
   hidden?: boolean;
@@ -38,6 +36,17 @@ export interface GridStyle {
   opacity?: number;
   xStep?: number;
   yStep?: number;
+}
+// ラベルの見た目
+export interface LabelStyle {
+  hidden?: boolean | [boolean, boolean];
+  size?: number;
+  color?: string;
+  backgroundColor?: string;
+  xStep?: number;
+  yStep?: number;
+  xPosition?: ('left' | 'right')[];
+  yPosition?: ('top' | 'bottom')[];
 }
 
 type Props = SVGProps<SVGSVGElement> & {
@@ -54,6 +63,7 @@ type Props = SVGProps<SVGSVGElement> & {
   pointStyle?: PointStyle;
   handleStyle?: HandleStyle;
   gridStyle?: GridStyle;
+  labelStyle?: LabelStyle;
 };
 
 export default function BezierTimeline({
@@ -89,6 +99,15 @@ export default function BezierTimeline({
     weight: 1,
     opacity: 0.2,
   },
+  labelStyle = {
+    hidden: false,
+    size: 12,
+    color: '#000000',
+    xStep: gridStyle.xStep,
+    yStep: gridStyle.yStep,
+    xPosition: ['left'],
+    yPosition: ['bottom'],
+  },
 
   ...props
 }: Props) {
@@ -97,6 +116,8 @@ export default function BezierTimeline({
   return (
     <svg width={width} height={height} {...props}>
       <Grid width={width} height={height} xRange={xRange} yRange={yRange} {...gridStyle} />
+
+      <Label width={width} height={height} xRange={xRange} yRange={yRange} {...labelStyle} />
 
       {convertedBezierCurve.map((point, i) => (
         <g key={i}>

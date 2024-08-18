@@ -34,7 +34,7 @@ export const Primary: Story = {
     bezierCurve: tmpBezierCurve,
     width,
     height,
-    xRange: [-10, width + 10],
+    xRange: [-60, width + 10],
     yRange: [-10, height + 10],
   },
 };
