@@ -12,3 +12,7 @@ export interface Point {
 export type BezierCurve = Point[];
 
 export type ViewRange = [number, number];
+
+export type DragStartHandler = (index: number, mouseX: number, mouseY: number) => void;
+export type DragHandler = (mouseX: number, mouseY: number) => void;
+export type DragEndHandler = () => void;

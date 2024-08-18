@@ -1,11 +1,12 @@
 import { SVGProps } from 'react';
 import { BezierCurve, ViewRange } from './types';
-import { toDrawPoints } from './utils';
+import { getViewRatio, toDrawPoints } from './utils';
 import { Grid } from './components/Grid';
 import { Label } from './components/Label';
 import { Handles } from './components/Handles';
 import { Curves } from './components/Curves';
 import { Points } from './components/Points';
+import { useBezierCurve } from './hooks/useBezierCurve';
 
 // 線の見た目
 export interface LineStyle {
@@ -49,8 +50,8 @@ export interface LabelStyle {
   yPosition?: ('top' | 'bottom')[];
 }
 
-type Props = SVGProps<SVGSVGElement> & {
-  bezierCurve: BezierCurve;
+export type BezierTimelineProps = SVGProps<SVGSVGElement> & {
+  defaultBezierCurve: BezierCurve;
 
   // 描画範囲
   width?: number;
@@ -107,7 +108,6 @@ const defaultLabelStyle = {
 } satisfies LabelStyle;
 
 export default function BezierTimeline({
-  bezierCurve,
   width = defaultWidth,
   height = defaultHeight,
   xRange = defaultXRange,
@@ -118,17 +118,31 @@ export default function BezierTimeline({
   gridStyle = defaultGridStyle,
   labelStyle = defaultLabelStyle,
   ...props
-}: Props) {
+}: BezierTimelineProps) {
+  const { defaultBezierCurve, ...rest } = props;
+
+  const [ratioX, ratioY] = getViewRatio(width, height, xRange, yRange);
+  const { bezierCurve, onPointDragStart, onDrag, onDragEnd } = useBezierCurve({
+    defaultBezierCurve,
+    ratioX,
+    ratioY,
+  });
+
   const convertedBezierCurve = toDrawPoints(bezierCurve, width, height, xRange, yRange);
 
   return (
-    <svg width={width} height={height} {...props}>
+    <svg width={width} height={height} {...rest} onMouseMove={(e) => onDrag(e.clientX, e.clientY)}>
       <Grid width={width} height={height} xRange={xRange} yRange={yRange} {...gridStyle} />
       <Label width={width} height={height} xRange={xRange} yRange={yRange} {...labelStyle} />
 
       <Handles bezierCurve={convertedBezierCurve} handleStyle={handleStyle} />
       <Curves bezierCurve={convertedBezierCurve} lineStyle={lineStyle} />
-      <Points bezierCurve={convertedBezierCurve} pointStyle={pointStyle} />
+      <Points
+        bezierCurve={convertedBezierCurve}
+        pointStyle={pointStyle}
+        onDragStart={onPointDragStart}
+        onDragEnd={onDragEnd}
+      />
     </svg>
   );
 }

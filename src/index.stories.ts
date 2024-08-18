@@ -31,7 +31,7 @@ const height = 200;
 
 export const Primary: Story = {
   args: {
-    bezierCurve: tmpBezierCurve,
+    defaultBezierCurve: tmpBezierCurve,
     width,
     height,
     xRange: [-60, width + 10],
