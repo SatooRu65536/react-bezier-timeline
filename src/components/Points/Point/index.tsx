@@ -49,6 +49,7 @@ export const Point = memo(
         strokeWidth={isSelected ? selectedBorderWeight : borderWeight}
         onMouseDown={handleOnMouseDown}
         onMouseUp={handleOnMouseUp}
+        onMouseLeave={() => setIsSelected(false)}
       />
     );
   },
