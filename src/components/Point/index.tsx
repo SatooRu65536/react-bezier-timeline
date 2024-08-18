@@ -9,6 +9,14 @@ type Props = PointStyle & {
 
 export const Point = memo(({ position, size, color, borderColor, borderWidth }: Props) => {
   return (
-    <circle className={styles.point} cx={position.x} cy={position.y} r={size} fill={color} stroke={borderColor} strokeWidth={borderWidth} />
+    <circle
+      className={styles.point}
+      cx={position.x}
+      cy={position.y}
+      r={size}
+      fill={color}
+      stroke={borderColor}
+      strokeWidth={borderWidth}
+    />
   );
 });
