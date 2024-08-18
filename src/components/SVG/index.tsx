@@ -22,7 +22,7 @@ export const SVG = memo(
       e.preventDefault();
 
       const { top, left } = e.currentTarget.getBoundingClientRect();
-      handleAddPoint(e.clientX - left, e.clientY - top);
+      handleAddPoint(e.clientX, e.clientY, top, left);
     };
 
     return (

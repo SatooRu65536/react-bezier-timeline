@@ -62,33 +62,6 @@ export const useBezierCurve = ({
   );
 
   /**
-   * ポイントを追加する
-   *
-   * @param {number} x - x座標
-   */
-  const handleAddPoint: AddPointHandler = useCallback(
-    (mouseX: number, mouseY: number) => {
-      // mouseX, mouseY を実座標に変換
-      const x = xRange[0] + mouseX / ratioX;
-      const y = yRange[0] + (height - mouseY) / ratioY;
-
-      const r = getBezierY(x, bezierCurve);
-      if (r === undefined) {
-        console.warn('Out of range');
-        return;
-      }
-      const { index } = r;
-      const newPoint: Position = { x, y };
-      const clonedBezierCurve = structuredClone(bezierCurve);
-
-      const prev = clonedBezierCurve.slice(0, index + 1);
-      const next = clonedBezierCurve.slice(index + 1);
-      setBezierCurve([...prev, { position: newPoint }, ...next]);
-    },
-    [bezierCurve, height, ratioX, ratioY, xRange, yRange],
-  );
-
-  /**
    * ポイントのドラッグ開始
    *
    * @param {number} index ドラッグするポイントのインデックス
@@ -220,6 +193,36 @@ export const useBezierCurve = ({
     setSelectElement(undefined);
   }, []);
 
+  /**
+   * ポイントを追加する
+   *
+   * @param {number} x - x座標
+   */
+  const handleAddPoint: AddPointHandler = useCallback(
+    (mouseX: number, mouseY: number, top: number, left: number) => {
+      // mouseX, mouseY を実座標に変換
+      const x = xRange[0] + (mouseX - left) / ratioX;
+      const y = yRange[0] + (height - (mouseY - top)) / ratioY;
+
+      const r = getBezierY(x, bezierCurve);
+      if (r === undefined) {
+        console.warn('Out of range');
+        return;
+      }
+      const { index } = r;
+      const newPoint: Position = { x, y };
+      const clonedBezierCurve = structuredClone(bezierCurve);
+
+      const prev = clonedBezierCurve.slice(0, index + 1);
+      const next = clonedBezierCurve.slice(index + 1);
+      setBezierCurve([...prev, { position: newPoint }, ...next]);
+
+      const initMousePos = { x: mouseX, y: mouseY };
+      setSelectElement({ type: 'point', index: index + 1, initPos: newPoint, initMousePos });
+    },
+    [bezierCurve, height, ratioX, ratioY, xRange, yRange],
+  );
+
   // 選択中か
   const isSelected = useMemo(() => !!selectElement && selectElement.type !== 'view', [selectElement]);
 
@@ -228,12 +231,12 @@ export const useBezierCurve = ({
     bezierCurve,
     xRange,
     yRange,
-    handleAddPoint,
     setBezierCurve,
     onPointDragStart,
     onHandleDragStart,
     onViewDragStart,
     onDrag,
     onDragEnd,
+    handleAddPoint,
   };
 };
