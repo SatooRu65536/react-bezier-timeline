@@ -215,8 +215,8 @@ export function adjustBezierCurve(target: BezierCurveWithId, before: BezierCurve
     // 新規追加 または 変更がない場合
     if (!beforePoint || deepEqPoints(point, beforePoint)) return diff;
 
-    const left = cloned.at(i - 1);
-    const right = cloned.at(i + 1);
+    const left = cloned[i - 1];
+    const right = cloned[i + 1];
 
     const diffPoint: DiffPoint = {
       left,
