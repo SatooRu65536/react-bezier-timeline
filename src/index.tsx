@@ -18,7 +18,7 @@ export interface SvgStyle {
 // 線の見た目
 export interface LineStyle {
   color?: string;
-  weight?: number;
+  width?: number;
 }
 // 点の見た目
 export interface PointStyle {
@@ -30,7 +30,7 @@ export interface PointStyle {
   selectedSize?: number;
   selectedColor?: string;
   selectedBorderColor?: string;
-  selectedBorderWeight?: number;
+  selectedBorderWidth?: number;
 }
 // ハンドルの見た目
 export interface HandleStyle {
@@ -39,20 +39,20 @@ export interface HandleStyle {
   borderColor?: string;
   borderWidth?: number;
   lineColor?: string;
-  lineWeight?: number;
+  lineWidth?: number;
 
   selectedSize?: number;
   selectedColor?: string;
   selectedBorderColor?: string;
-  selectedBorderWeight?: number;
+  selectedBorderWidth?: number;
   selectedLineColor?: string;
-  selectedLineWeight?: number;
+  selectedLineWidth?: number;
 }
 // グリッドの見た目
 export interface GridStyle {
   hidden?: boolean;
   color?: string;
-  weight?: number;
+  weidth?: number;
   opacity?: number;
   xStep?: number;
   yStep?: number;
@@ -90,7 +90,7 @@ const defaultXRange_ = [-10, defaultWidth + 10] satisfies ViewRange;
 const defaultYRange_ = [-10, defaultHeight + 10] satisfies ViewRange;
 const defaultLineStyle = {
   color: '#343A40',
-  weight: 3,
+  width: 3,
 } satisfies LineStyle;
 const defaultPointStyle = {
   size: 4,
@@ -101,7 +101,7 @@ const defaultPointStyle = {
   selectedSize: 4,
   selectedColor: '#007BFF',
   selectedBorderColor: '#007BFF',
-  selectedBorderWeight: 2,
+  selectedBorderWidth: 2,
 } satisfies PointStyle;
 const defaultHandleStyle = {
   size: 5,
@@ -109,21 +109,21 @@ const defaultHandleStyle = {
   borderColor: '#007BFF',
   borderWidth: 1,
   lineColor: '#000000',
-  lineWeight: 1,
+  lineWidth: 1,
 
   selectedSize: 5,
   selectedColor: '#007BFF',
   selectedBorderColor: '#007BFF',
-  selectedBorderWeight: 1,
+  selectedBorderWidth: 1,
   selectedLineColor: '#000000',
-  selectedLineWeight: 1,
+  selectedLineWidth: 1,
 } satisfies HandleStyle;
 const defaultGridStyle = {
   hidden: false,
   xStep: 50,
   yStep: 50,
   color: '#000000',
-  weight: 1,
+  weidth: 1,
   opacity: 0.2,
 } satisfies GridStyle;
 const defaultLabelStyle = {

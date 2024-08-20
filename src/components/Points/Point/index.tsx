@@ -22,7 +22,7 @@ export const Point = memo(
     selectedSize,
     selectedColor,
     selectedBorderColor,
-    selectedBorderWeight,
+    selectedBorderWidth,
     onDragStart,
     onDragEnd,
   }: Props) => {
@@ -46,7 +46,7 @@ export const Point = memo(
         r={isSelected ? selectedSize : size}
         fill={isSelected ? selectedColor : color}
         stroke={isSelected ? selectedBorderColor : borderColor}
-        strokeWidth={isSelected ? selectedBorderWeight : borderWeight}
+        strokeWidth={isSelected ? selectedBorderWidth : borderWeight}
         onMouseDown={handleOnMouseDown}
         onMouseUp={handleOnMouseUp}
         onMouseLeave={() => setIsSelected(false)}

@@ -37,12 +37,36 @@ export const Default: Story = {
   },
 };
 
-export const Primary: Story = {
+export const CustomRange: Story = {
   args: {
     defaultBezierCurve: tmpBezierCurve,
     width,
     height,
-    defaultXRange: [-60, width + 10],
-    defaultYRange: [-10, height + 10],
+    defaultXRange: [-100, 300],
+    defaultYRange: [-100, 300],
+  },
+};
+
+export const CustomPointStyle: Story = {
+  args: {
+    defaultBezierCurve: tmpBezierCurve,
+    width,
+    height,
+    lineStyle: {
+      color: '#EBDDB4',
+      width: 10,
+    },
+  },
+};
+
+export const CustomLineStyle: Story = {
+  args: {
+    defaultBezierCurve: tmpBezierCurve,
+    width,
+    height,
+    lineStyle: {
+      color: '#EBDDB4',
+      width: 10,
+    },
   },
 };

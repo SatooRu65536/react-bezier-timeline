@@ -24,13 +24,13 @@ export const Handle = memo(
     borderColor,
     borderWidth,
     lineColor,
-    lineWeight,
+    lineWidth,
     selectedSize = 0,
     selectedColor,
     selectedBorderColor,
-    selectedBorderWeight,
+    selectedBorderWidth,
     selectedLineColor,
-    selectedLineWeight,
+    selectedLineWidth,
     onDragStart,
     onDragEnd,
   }: Props) => {
@@ -60,7 +60,7 @@ export const Handle = memo(
           x2={origin.x + position.x}
           y2={origin.y - position.y}
           stroke={isSelected ? selectedLineColor : lineColor}
-          strokeWidth={isSelected ? selectedLineWeight : lineWeight}
+          strokeWidth={isSelected ? selectedLineWidth : lineWidth}
         />
         <g transform={`translate(${x}, ${y})`}>
           <rect
@@ -73,7 +73,7 @@ export const Handle = memo(
             height={size_}
             fill={isSelected ? selectedColor : color}
             stroke={isSelected ? selectedBorderColor : borderColor}
-            strokeWidth={isSelected ? selectedBorderWeight : borderWidth}
+            strokeWidth={isSelected ? selectedBorderWidth : borderWidth}
             onMouseDown={handleOnMouseDown}
             onMouseUp={handleOnMouseUp}
           />

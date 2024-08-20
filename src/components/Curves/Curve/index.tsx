@@ -1,14 +1,12 @@
+import { LineStyle } from '@/index';
 import styles from './index.module.css';
 import { Point } from '@/types';
 import { memo } from 'react';
 
-interface Props {
+type Props = {
   left: Point;
   right: Point;
-
-  color?: string;
-  width?: number;
-}
+} & LineStyle;
 
 export const Curve = memo(({ left, right, color, width }: Props) => {
   // 開始

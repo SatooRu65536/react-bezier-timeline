@@ -11,7 +11,7 @@ type Props = GridStyle & {
 };
 
 export const Grid = memo(
-  ({ width, height, xRange, yRange, xStep = 50, yStep = 50, hidden, color, weight, opacity }: Props) => {
+  ({ width, height, xRange, yRange, xStep = 50, yStep = 50, hidden, color, weidth, opacity }: Props) => {
     const [ratioX, ratioY] = getViewRatio(width, height, xRange, yRange);
     const xLineLabels = getLineLabels(xRange, xStep, ratioX); // 縦軸
     const yLineLabels = getLineLabels(yRange, yStep, ratioY, height); // 横軸
@@ -29,7 +29,7 @@ export const Grid = memo(
                   x2={x.position}
                   y2={height}
                   stroke={color}
-                  strokeWidth={weight}
+                  strokeWidth={weidth}
                   style={{ opacity }}
                 />
               ))}
@@ -43,7 +43,7 @@ export const Grid = memo(
                   x2={width}
                   y2={y.position}
                   stroke={color}
-                  strokeWidth={weight}
+                  strokeWidth={weidth}
                   style={{ opacity }}
                 />
               ))}
