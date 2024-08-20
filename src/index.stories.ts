@@ -52,9 +52,16 @@ export const CustomPointStyle: Story = {
     defaultBezierCurve: tmpBezierCurve,
     width,
     height,
-    lineStyle: {
+    pointStyle: {
+      size: 5,
       color: '#EBDDB4',
-      width: 10,
+      borderColor: '#000000',
+      borderWeight: 1,
+
+      selectedColor: '#EBDDB4',
+      selectedSize: 7,
+      selectedBorderColor: '#000000',
+      selectedBorderWidth: 4,
     },
   },
 };
