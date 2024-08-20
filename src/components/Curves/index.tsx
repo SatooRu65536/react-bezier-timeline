@@ -1,11 +1,11 @@
 import { LineStyle } from '@/index';
-import { BezierCurve } from '@/types';
+import { BezierCurveWithId } from '@/types';
 import { mapPairs } from '@/utils';
 import { memo } from 'react';
 import { Curve } from './Curve';
 
 interface Props {
-  bezierCurve: BezierCurve;
+  bezierCurve: BezierCurveWithId;
   lineStyle: LineStyle;
 }
 

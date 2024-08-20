@@ -2,6 +2,6 @@
   cursor: pointer;
 }
 
-.point[data-selected="true"] {
+.point[data-selected='true'] {
   cursor: none;
 }

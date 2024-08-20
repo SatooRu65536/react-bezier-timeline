@@ -1,6 +1,7 @@
 import {
   AddPointHandler,
   BezierCurve,
+  BezierCurveWithId,
   DragEndHandler,
   DragHandler,
   HandleDragStartHandler,
@@ -10,7 +11,7 @@ import {
   ViewDragStartHandler,
   ViewRange,
 } from '@/types';
-import { getBezierY, getViewRatio } from '@/utils';
+import { adjustBezierCurve, getBezierY, getViewRatio } from '@/utils';
 import { useCallback, useMemo, useState } from 'react';
 
 interface SelectedHandle {
@@ -50,7 +51,9 @@ export const useBezierCurve = ({
   defaultYRange,
   isMetaKeyDown,
 }: BezierCurveProps) => {
-  const [bezierCurve, setBezierCurve] = useState<BezierCurve>(defaultBezierCurve ?? []);
+  const [bezierCurve, setBezierCurve] = useState<BezierCurveWithId>(
+    defaultBezierCurve?.map((p, i) => ({ ...p, id: i })) ?? [],
+  );
   const [selectElement, setSelectElement] = useState<SelectedElement>();
 
   const [xRange, setXRange] = useState<ViewRange>(defaultXRange);
@@ -172,7 +175,9 @@ export const useBezierCurve = ({
         // 両端のハンドルを動かす
         const handleR: Position = { x: dx, y: dy };
         const handleL: Position = { x: -dx, y: -dy };
-        clonedBezierCurve[index] = { position: initPos, handleL, handleR };
+        clonedBezierCurve[index].position = initPos;
+        clonedBezierCurve[index].handleL = handleL;
+        clonedBezierCurve[index].handleR = handleR;
       } else if (selectElement.type === 'handle') {
         const x = initPos.x + dx;
         const y = initPos.y + dy;
@@ -182,7 +187,7 @@ export const useBezierCurve = ({
         else clonedBezierCurve[index][selectElement.handleType] = { x, y };
       }
 
-      setBezierCurve(clonedBezierCurve);
+      setBezierCurve((b) => adjustBezierCurve(clonedBezierCurve, b));
     },
     [bezierCurve, isMetaKeyDown, ratioX, ratioY, selectElement],
   );
@@ -215,7 +220,8 @@ export const useBezierCurve = ({
 
       const prev = clonedBezierCurve.slice(0, index + 1);
       const next = clonedBezierCurve.slice(index + 1);
-      setBezierCurve([...prev, { position: newPoint }, ...next]);
+      const newPointId = bezierCurve.reduce((acc, point) => Math.max(acc, point.id), 0) + 1;
+      setBezierCurve((b) => adjustBezierCurve([...prev, { position: newPoint, id: newPointId }, ...next], b));
 
       const initMousePos = { x: mouseX, y: mouseY };
       setSelectElement({ type: 'point', index: index + 1, initPos: newPoint, initMousePos });

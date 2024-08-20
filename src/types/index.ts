@@ -8,7 +8,11 @@ export interface Point {
   position: Position;
   handleR?: Position;
 }
+export interface Id {
+  id: number;
+}
 
+export type BezierCurveWithId = (Point & Id)[];
 export type BezierCurve = Point[];
 
 export type ViewRange = [number, number];

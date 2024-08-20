@@ -1,12 +1,12 @@
 import styles from './index.module.css';
 import { HandleStyle } from '@/index';
-import { BezierCurve, DragEndHandler, HandleDragStartHandler } from '@/types';
+import { BezierCurveWithId, DragEndHandler, HandleDragStartHandler } from '@/types';
 import { memo } from 'react';
 import { Handle } from './Handle';
 
 interface Props {
   hidden: boolean;
-  bezierCurve: BezierCurve;
+  bezierCurve: BezierCurveWithId;
   handleStyle: HandleStyle;
 
   onDragStart: HandleDragStartHandler;

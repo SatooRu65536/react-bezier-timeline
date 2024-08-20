@@ -1,10 +1,10 @@
 import { PointStyle } from '@/index';
-import { BezierCurve, DragEndHandler, PointDragStartHandler } from '@/types';
+import { BezierCurveWithId, DragEndHandler, PointDragStartHandler } from '@/types';
 import { memo } from 'react';
 import { Point } from './Point';
 
 interface Props {
-  bezierCurve: BezierCurve;
+  bezierCurve: BezierCurveWithId;
   pointStyle: PointStyle;
 
   onDragStart: PointDragStartHandler;
